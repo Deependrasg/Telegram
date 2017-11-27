@@ -55,8 +55,7 @@ def send_message(request):
     client1.session.try_load_or_create_new(session_user_id='+918962141530')
     if client1.connect():
         if message:
-            import pdb; pdb.set_trace()
-            client1.send_message('+919349782814', message)
+            client1.send_message('+918817401789', message)
             data = {'message':'otp genrated','status':'sucess'}
             return HttpResponse(json.dumps(data),content_type="application/json")
         data = {'message':'otp genrated','status':404}
@@ -64,4 +63,35 @@ def send_message(request):
     data = {'message':'otp genrated','status':404}
     return HttpResponse(json.dumps(data),content_type="application/json")
         # client1.send_file('+918817401789', '/home/rails/Downloads/Organization_related_provider.png')
+
+from telethon.tl.types import *
+from telethon.tl.functions.contacts import *
+from django.http import JsonResponse
+def all_list(request):
+    data={}
+    data_list=[]
+    api_id   = 169722
+    api_hash = 'b4d4b4374d60a3ba9d7ee84ce010e2b2'
+    phone    = '+918962141530'
+    client = TelegramClient('+918962141530', api_id, api_hash)
+    client.session.try_load_or_create_new(session_user_id='+918962141530')
+    if client.connect():
+        
+        contacts = client.invoke(GetContactsRequest(0))
+        users=contacts.users
+        for user in users:
+
+            data_list.append ({
+                'id':user.id,
+                'first_name': user.first_name,
+                # 'status':user.status,
+                'phone':user.phone,
+                })
+
+        data = list(data_list)
+        import pdb; pdb.set_trace()
+        return HttpResponse(json.dumps(data),content_type="application/json")
+        
+    data = {'message':'otp genrated','status':404}
+    return HttpResponse(json.dumps(data),content_type="application/json")
 
